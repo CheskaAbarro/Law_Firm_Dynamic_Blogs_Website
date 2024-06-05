@@ -1,0 +1,89 @@
+﻿@model List<AbarroLaw.Web.Models.Domain.CasePost>
+
+
+@{
+
+}
+<style>
+    body {
+        overflow-x: hidden;
+    }
+
+    .flex-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 75vh; /* Adjust as necessary */
+        text-align: center;
+    }
+
+    .bg-img {
+        height: 70vh;
+        width: 100vw;
+        object-fit: cover;
+        filter: brightness(0.7);
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+    }
+
+    .landing-title {
+        font-family: Poppins;
+        color: white;
+        letter-spacing: 0.2em;
+        line-height: 1.5em;
+        text-align: center;
+        font-size: 3.5vw;
+        font-weight: bold;
+    }
+</style>
+
+
+
+@* Landing ------------------------------------------------------------------- *@
+<div class="flex-container mt-0 pt-0">
+    <img class="bg-img" src="~/images/landing_2.png" />
+    <h1 class="landing-title mt-4">This Practice</h1>
+</div>
+
+<div class="container d-flex flex-column align-items-center about-us mb-5" style="height: auto;">
+    <div style="letter-spacing: 0.5em;">
+        <h2>- This Practice Case Posts -</h2>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var casePost in Model)
+                {
+                    <div class="mb-5 bg-light box-shadow">
+                        @* for image *@
+                        <img src="~/images/practice/all_practice.png" alt="@casePost.Heading" class="mb-2 d-block img-fluid"/>
+
+                        @* Heading and date *@
+                        <h2 class="mb-4">@casePost.Heading</h2>
+                        <p class="mb-2">Publish Date: @casePost.PublishedDate.ToShortDateString()</p>
+
+                        @* Practice area *@
+                        <p class="mb-4">
+                            @foreach (var practice in casePost.Practices)
+                            {
+                                <span class="badge bg-secondary me-1">@practice.PracticeName</span>
+                            }
+                        </p>
+
+                        @* Summary *@
+                        <p class="mb-4">@casePost.ShortDescription</p>
+
+                        <a class="btn btn-dark" href="">Read more >></a>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

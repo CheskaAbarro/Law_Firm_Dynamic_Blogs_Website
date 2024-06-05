@@ -1,0 +1,123 @@
+﻿@model List<AbarroLaw.Web.Models.Domain.CasePost>
+
+@{
+    ViewBag.ShowFooter = false;
+    ViewBag.ShowMessage = false;
+}
+
+
+
+<style>
+    body {
+        overflow-x: hidden;
+    }
+
+    .flex-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40vh; /* Adjust as necessary */
+        text-align: center;
+    }
+
+    .bg-img {
+        height: 40vh;
+        width: 100vw;
+        object-fit: cover;
+        filter: brightness(0.7);
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        background-color: #305160;
+    }
+
+    .landing-title {
+        font-family: Poppins;
+        color: white;
+        letter-spacing: 0.2em;
+        line-height: 1.5em;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .auto-width {
+        width: auto;
+        white-space: nowrap;
+    }
+
+    /* th, td {
+            font-family: Poppins;
+        } */
+
+</style>
+
+
+@* Landing ------------------------------------------------------------------- *@
+<div class="flex-container mt-0 pt-0">
+    <div class="bg-img"></div>
+    <div class="container d-flex flex-column align-items-center content-wrapper">
+        <h1 class="landing-title mt-5 pt-5">ADMIN - View All Practice</h1>
+    </div>
+</div>
+
+<div class="container py-5">
+    <form method="post">
+        @if (Model != null && Model.Any())
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="auto-width">ID</th>
+                        <th class="auto-width">Case Name</th>
+                        <th class="auto-width">Heading</th>
+                        <th class="auto-width">Content</th>
+                        <th class="auto-width">Short Desc</th>
+                        <th class="auto-width">Practice Area</th>
+                        <th class="auto-width">PublishedDate</th>
+                        <th class="auto-width">Visible</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cases in Model)
+                    {
+                        <tr>
+                            <td>@cases.Id</td>
+                            <td>@cases.CaseName</td>
+                            <td>@cases.Heading</td>
+                            <td>@cases.Content</td>
+                            <td>@cases.ShortDescription</td>
+                            <td>
+                                <div class="d-flex">
+                                    @foreach (var practice in cases.Practices)
+                                    {
+                                        <span class="badge bg-secondary me-1">@practice.PracticeName</span>
+                                    }
+                                </div>
+                            </td>
+                            <td>@cases.PublishedDate.ToShortDateString()</td>
+                            <td>@cases.Visible</td>
+                            <td>
+                                <button class="btn btn-primary">
+                                    <a asp-controller="AdminCase" asp-action="EditCase" asp-route-id="@cases.Id" style="color: white;">
+                                        Edit
+                                    </a>
+                                </button>
+
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <h3>No other practice areas!</h3>
+        }
+    </form>
+    
+
+</div>

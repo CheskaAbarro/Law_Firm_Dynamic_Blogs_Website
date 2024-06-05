@@ -1,0 +1,129 @@
+﻿@model List<AbarroLaw.Web.Models.Domain.Practice>
+
+@{
+}
+
+
+<style>
+    body {
+        overflow-x: hidden;
+    }
+
+    .flex-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 70vh; /* Adjust as necessary */
+        text-align: center;
+    }
+
+    .bg-img {
+        height: 70vh;
+        width: 100vw;
+        object-fit: cover;
+        filter: brightness(0.7);
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+    }
+
+    .landing-title {
+        font-family: Poppins;
+        color: white;
+        letter-spacing: 0.2em;
+        line-height: 1.5em;
+        text-align: center;
+        font-size: 3.5vw;
+        font-weight: bold;
+    }
+
+    .practice-area-main {
+        font-family: Poppins;
+    }
+
+    .card-title {
+        color: white;
+    }
+
+    .card-images {
+        height: 20vh;
+    }
+</style>
+
+
+@* Landing ------------------------------------------------------------------- *@
+<div class="flex-container mt-0 pt-0">
+    <img class="bg-img" src="~/images/practice_bg.png" />
+    <div class="container d-flex flex-column align-items-center content-wrapper">
+        <h1 class="landing-title mt-5 pt-3"> PRACTICE AREA</h1>
+    </div>
+</div>
+
+
+@* Cards for Practice Areas ------------------------------------------ *@
+<div class="container d-flex flex-column align-items-center mb-5 mt-5" style="height: auto;">
+    <div style="letter-spacing: 0.5em;">
+        <h2>- OUR PRACTICE AREAS -</h2>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row row-cols-auto">
+
+            @* Card format *@
+            @* <div class="col">
+                <div class="card mb-3" style="width: 18rem;">
+                    <div class="position-relative">
+                        <img src="~/images/practice/business_bg.png" class="card-img-top card-images">
+                        <div class="position-absolute top-50 start-50 translate-middle">
+                            <h5 class="card-title text-center">Card title</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="btn btn-primary">Learn more >></a>
+                    </div>
+                </div>
+            </div> *@
+
+            @* src="@Url.Content("~/" + practice.PracticeImage)" *@
+
+            @* For practices based on DB ----------------------------------- *@
+
+            @if(Model != null && Model.Any())
+            {
+                @foreach (var practice in Model)
+                {
+                    @if (practice.Visible == "true")
+                    {
+                        <div class="col">
+                            <div class="card mb-3" style="width: 18rem;">
+                                <div class="position-relative">
+                                    <img src="@Url.Content("~/" + practice.PracticeImage)" class="card-img-top card-images">
+                                    <div class="position-absolute top-50 start-50 translate-middle">
+                                        <h4 class="card-title text-center">@practice.PracticeName</h4>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">@practice.PracticeDescription</p>
+                                    <a href="#" class="btn btn-primary">Learn more >></a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    
+                }
+
+
+            }
+            else
+            {
+
+                <h4>No practice areas at the moment.</h4>
+            }
+            
+
+        </div>
+    </div>
+</div>

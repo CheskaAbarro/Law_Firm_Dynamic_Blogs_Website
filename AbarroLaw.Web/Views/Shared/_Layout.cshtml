@@ -1,0 +1,322 @@
+﻿@{
+    bool showFooter = ViewBag.ShowFooter ?? true; // Default to true if not set
+    bool showMessage = ViewBag.ShowMessage ?? true; // Default to true if not set
+}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @* <title>@ViewData["Title"] - Abarro Law Office</title> *@
+    <title>Abarro Law Office</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AbarroLaw.Web.styles.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+    @* Froala *@
+    <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet' type='text/css' />
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'></script>
+
+    @* Fonts *@
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+
+    <style>
+        body
+        {
+            margin: 0;
+        }
+
+        /* Navbar designs */
+        .nav-link 
+        {
+            color: white !important;
+        }
+
+        .nav-logo
+        {
+            height: 22vh;
+        }
+
+        .nav-item
+        {
+            font-family: Roboto;
+        }
+
+        .navbar-design
+        {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000; /* Ensure navbar is on top */
+        }
+
+
+        /* footer designs */
+        footer
+        {
+            background-color: #2B3A4F;
+            font-family: Roboto;
+        }
+
+        .no-underline
+        {
+            text-decoration: none;
+        }
+
+        .text-footer-title
+        {
+            color: white !important;
+        }
+
+        .img-footer
+        {
+            height: 1.5vw;
+        }
+
+
+        /* For message us */
+        .message-us {
+            height: 50vh;
+            background-image: url('@Url.Content("~/images/message_bg.png")');
+            background-size: cover;
+            color: white;
+            text-align: center;
+            font-family: Poppins;
+        }
+
+        .message-us .container {
+            height: 100%;
+        }
+
+        
+    </style>
+
+
+
+</head>
+
+
+<body>
+   
+    @* Header ---------------------------------------------------------------------------------------*@
+
+    <nav class="navbar navbar-expand-lg navbar-dark pt-0 navbar-design sticky-top">
+        <div class="container">
+
+            @* For Logo *@
+            <a class="navbar-brand pt-0" asp-controller="Home" asp-action="Index">
+                <img src="~/images/logo_header.png" class="nav-logo"/>
+            </a>
+
+            @* for collapse *@
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            @* Menu buttons *@
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto fs-5">
+                    @* Home *@
+                    <li class="nav-item px-3">
+                        <a class="nav-link active" aria-current="page" asp-controller="Home" asp-action="Index">
+                            HOME
+                        </a>
+                    </li>
+                    <img src="~/images/line.png" class="px-3" style="height: 6vh;" />
+
+                    @* Practice area *@
+                    <li class="nav-item px-3">
+                        <a class="nav-link" asp-controller="PracticeArea" asp-action="PracticeAreaView">
+                            PRACTICE AREA
+                        </a>
+                    </li>
+                    <img src="~/images/line.png" class="px-3" style="height: 6vh;" />
+
+                    @* About us *@
+                    <li class="nav-item px-3">
+                        <a class="nav-link" asp-controller="Home" asp-action="AboutUs">
+                            ABOUT US
+                        </a>
+                    </li>
+                    <img src="~/images/line.png" class="px-3" style="height: 6vh;" />
+
+                    @* Contact us *@
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Contact" asp-action="ContactUs">
+                            CONTACT US
+                        </a>
+                    </li>
+
+                    <img src="~/images/line.png" class="px-3" style="height: 6vh;" />
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Admin
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" asp-controller="AdminPractice" asp-action="AddPractice">
+                                    Add New Practice
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" asp-controller="AdminPractice" asp-action="ViewAllPractice">
+                                    View All Practice
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" asp-controller="AdminCase" asp-action="AddCase">
+                                    Add New Case
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" asp-controller="AdminCase" asp-action="ViewAllCase">
+                                    View All Cases
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    @* for Views/Home/Index page --------------------------------------------------------------------*@
+    <div >
+        <main role="main" class="pb-0">
+            @RenderBody()
+        </main>
+    </div>
+
+
+
+    @*Message us  -----------------------------------------------------------------------------------*@
+    @if(showMessage)
+    {
+        <div class="pt-0 message-us">
+            <div class="container d-flex justify-content-center align-items-center min-vh-50">
+                <div class="text-center areas-fonts w-100">
+                    <h1 class="mt-2" style="font-weight: bold; letter-spacing: 0.17em;">
+                        Are you ready to contact us?
+                    </h1>
+                    <p class="mt-4 mx-auto" style="max-width: 55vw; letter-spacing: 0.1em; font-weight: 200;">
+                        If you have legal concerns or questions, look no further! Our dedicated, reliable team is committed
+                        to providing high-quality legal solutions tailored to your needs.
+                    </p>
+                    <button class="btn btn-light mt-4" type="button" asp-controller="Contact" asp-action="ContactUs">
+                        Send a message
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+    
+
+
+    @* Footer ---------------------------------------------------------------------------------------*@
+    @if (showFooter)
+    {
+        <footer class="text-center text-lg-start bg-body-tertiary text-muted mb-0 pb-0" style="flex: 1;">
+            <section class="pt-2">
+                <div class="container text-center text-md-start mt-5">
+                    @* Row organization *@
+                    <div class="row mt-3">
+
+                        @* Start Company logo and slogan *@
+                        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                            <!-- Content -->
+                            <img src="~/images/logo_footer.png" style="height: 7vw;" />
+                            <p class="mt-2" style="color: lightgray">
+                                Dedikasyon at galing sa batas. Ipinaglalaban namin ang iyong karapatan.
+                            </p>
+                        </div>
+                        @* End Company logo and slogan *@
+
+                        @* Start Quick Links *@
+                        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                            <h6 class="text-uppercase fw-bold mb-4 fs-5 text-footer-title">
+                                QUICK LINKS
+                            </h6>
+                            @* Home *@
+                            <p>
+                                <a href="#!" class="text-reset no-underline">Home</a>
+                            </p>
+
+                            @* Practice Area *@
+                            <p>
+                                <a href="#!" class="text-reset no-underline">Practice Area</a>
+                            </p>
+
+                            @* About us *@
+                            <p>
+                                <a href="#!" class="text-reset no-underline">About us</a>
+                            </p>
+
+                            @* Contact us *@
+                            <p>
+                                <a href="#!" class="text-reset no-underline">Contact us</a>
+                            </p>
+                        </div>
+                        @* End Quick Links *@
+
+                        @* Start Contacts *@
+                        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                            <!-- Links -->
+                            <h6 class="text-uppercase fw-bold mb-4 text-footer-title">CONNECT WITH US!</h6>
+
+                            @* Facebook link *@
+                            <p>
+                                <img src="~/images/fb_icon_footer.png" class="img-footer" />
+                                facebook.com/Law.Abarro/
+                            </p>
+
+                            @* Email *@
+                            <p>
+                                <img src="~/images/mail_icon_footer.png" class="img-footer" />
+                                abarrolawoffice@gmail.com
+                            </p>
+
+                            @* Phone *@
+                            <p>
+                                <img src="~/images/phone_icon_footer.png" class="img-footer" />
+                                +63 931 63 4056
+                            </p>
+                        </div>
+                        @* End Contacts *@
+
+                    </div>
+                </div>
+            </section>
+
+            @* Start Copyright *@
+            <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+                Copyright © 2024. By Cheska Abarro. All rights reserved.
+            </div>
+            @* End Copyright *@
+        </footer>
+    }
+    
+
+
+
+    @* Scripts --------------------------------------------------------------------------------------*@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

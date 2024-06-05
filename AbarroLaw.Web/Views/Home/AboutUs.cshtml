@@ -1,0 +1,122 @@
+﻿
+@{
+}
+
+
+<style>
+    body
+    {
+        overflow-x: hidden;
+    }
+
+    .flex-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 75vh; /* Adjust as necessary */
+        text-align: center;
+    }
+
+
+    .bg-img
+    {
+        height: 70vh;
+        width: 100vw;
+        object-fit: cover;
+        filter: brightness(0.7);
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+    }
+
+    .landing-title
+    {
+        font-family: Poppins;
+        color: white;
+        letter-spacing: 0.2em;
+        line-height: 1.5em;
+        text-align: center;
+        font-size: 3.5vw;
+        font-weight: bold;
+    }
+    
+    .about-us
+    {
+        font-family: Poppins;
+    }
+
+</style>
+
+
+
+@* Landing ------------------------------------------------------------------- *@
+<div class="flex-container mt-0 pt-0">
+    <img class="bg-img" src="~/images/about-us-bg.png" />
+    <h1 class="landing-title mt-4"> ABOUT </br> ABARRO LAW OFFICE</h1>
+</div>
+
+
+@* About us contents *@
+<div class="container d-flex flex-column align-items-center about-us" style="height: auto; margin-top: 5vh; "
+    <div style="letter-spacing: 0.5em;">
+        <h2>- ABOUT US -</h2>
+    </div>
+
+    <div class="container mb-5 pb-5 ps-5 pe-5" style="width: 70vw;">
+        <div class="row mt-5 pt-3 d-flex justify-content-center">
+
+            @* About Atty. Abarro *@
+            <div class="col d-flex justify-content-center mb-5">
+                <div class="container mb-4 ms-0 ps-0 me-0 pe-0" style="width: auto;">
+                    <img src="~/images/about-us-profile.png" style="height: 20vw;" />
+                </div>
+
+                <div class="container mb-4 mt-4 align-items-center" style="width: auto;">
+                    <h3 class="text-uppercase fw-bold mb-4">
+                        ATTY. GILBERT N. ABARRO
+                    </h3>
+                    <p class="mb-4">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod vehicula massa,
+                        sed feugiat justo ultricies sit amet. Integer eu semper est. Sed at purus lectus. Donec
+                        ultricies justo vel sapien vehicula, non eleifend nisi molestie. Sed ut neque id dui
+                        tempor facilisis. Nunc ut aliquet mauris.
+                        </br></br>
+                        Sed vehicula lacinia justo, ac fringilla velit
+                        luctus nec. Vivamus non metus vel neque pharetra tincidunt. Sed sagittis, libero eget efficitur
+                        consectetur, dolor lacus fermentum dui, ut dignissim nisl dui nec libero.
+                    </p>
+                </div>
+            </div>
+
+            @* Experience *@
+            <div class="d-flex justify-content-center">
+
+                <div class="container mb-4 mt-4 align-items-center" style="width: auto; text-align: right;">
+                    <h3 class="text-uppercase fw-bold mb-4">
+                        EXPERIENCE
+                    </h3>
+                    <p class="mb-4" >
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod vehicula massa,
+                        sed feugiat justo ultricies sit amet. Integer eu semper est. Sed at purus lectus. Donec
+                        ultricies justo vel sapien vehicula, non eleifend nisi molestie. Sed ut neque id dui
+                        tempor facilisis. Nunc ut aliquet mauris.
+                        </br></br>
+                        Sed vehicula lacinia justo, ac fringilla velit
+                        luctus nec. Vivamus non metus vel neque pharetra tincidunt. Sed sagittis, libero eget efficitur
+                        consectetur, dolor lacus fermentum dui, ut dignissim nisl dui nec libero.
+                    </p>
+                </div>
+                <div class="container mb-4 ms-0 ps-0 me-0 pe-0" style="width: auto;">
+                    <img src="~/images/experience.png" style="height: 20vw;" />
+                </div>
+            </div>
+
+
+
+
+        </div>        
+    </div>
+
+</div>

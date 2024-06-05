@@ -1,0 +1,190 @@
+﻿
+@{
+}
+
+<style>
+    body {
+        overflow-x: hidden;
+    }
+
+    .flex-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 70vh; /* Adjust as necessary */
+        text-align: center;
+    }
+
+    .bg-img {
+        height: 70vh;
+        width: 100vw;
+        object-fit: cover;
+        filter: brightness(0.7);
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+    }
+
+    .landing-title {
+        font-family: Poppins;
+        color: white;
+        letter-spacing: 0.2em;
+        line-height: 1.5em;
+        text-align: center;
+        font-size: 3.5vw;
+        font-weight: bold;
+    }
+
+    .contact-details {
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+
+        position: relative;
+
+        font-family: Poppins;
+    }
+
+    .message-title {
+        width: auto;
+        margin: auto;
+        font-family: Poppins;
+        font-size: 1.5em;
+        letter-spacing: 0.3em;
+    }
+
+    .details-image {
+        background-size: cover;
+        background-image: url('@Url.Content("~/images/contact_bg1.png")');
+        color: white;
+        height: 100vh;
+        
+    }
+
+    .contact-innner {
+        align-items: center;
+        margin-bottom: 0;
+        font-size: 1.2em
+    }
+
+    .contact-img {
+       height: 2vw;
+       margin-right: 1vw;
+    }
+    
+</style>
+
+
+@* Landing ------------------------------------------------------------------- *@
+<div class="flex-container mt-0 pt-0">
+    <img class="bg-img" src="~/images/contact_bg.png" />
+    <div class="container d-flex flex-column align-items-center content-wrapper">
+        <h1 class="landing-title mt-5 pt-3"> CONTACT US</h1>
+    </div>
+</div>
+
+
+@* Contact middle ------------------------------------------------------------------- *@
+<div class="container-fluid ps-0 pe-0 contact-details">
+    <div class="row g-0">
+
+        <!-- Message inquiry -->
+        <div class="col-7 details-only">
+            @* For title *@
+            <div class="container mt-5 pt-2 mb-4">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-md-10 text-center">
+                        <!-- Adjust col size as needed -->
+                        <h2 class="message-title mb-3">- SCHEDULE A FREE CONSULTATION -</h2>
+                        <p>
+                            Simply fill out the form below and one of our friendly and knowledgeable
+                            staff members will get back to you as soon as possible. We look forward to
+                            hearing from you and assisting you with your needs.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- First column for phone number -->
+            @* Name *@
+            <div class="container row mb-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Enter your name">
+                </div>
+            </div>
+            @* Email *@
+            <div class="container row mb-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Email">
+                    <input type="text" class="form-control ms-4" placeholder="Phone">
+                </div>
+            </div>
+            @* Practice area *@
+            <div class="container row mb-3">
+                <div class="input-group">
+                    <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+                        <option selected>Choose...</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+            </div>
+            @* Enter message *@
+            <div class="container row mb-3">
+                <div class="form-group">
+                    <textarea class="form-control col-md-8 col-sm-12" placeholder="Enter message" style="height: 200px; resize: none;"></textarea>
+                </div>
+            </div>
+            @* Button *@
+            <div class="container row mb-3">
+                <div class="col-auto ms-auto">
+                    <button class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Image with details -->
+        <div class="col-5 details-image">
+            @* For title *@
+            <div class="container row mt-5 pt-2 mb-4">
+                <div class="col">
+                    <h2>Let's get in touch!</h2>
+                    <p>
+                        In Abarro Law Office, we are dedicated to providing top-quality solutions for all of your needs. 
+                        If you have any questions, comments, or concerns, please don't hesitate to get in touch with us
+                    </p>
+                </div>
+            </div>
+
+            <!-- First column for phone number -->
+            <div class="container row mb-4">
+                <div class="col d-flex align-items-center">
+                    <img src="~/images/phone_icon_contact.png" class="contact-img">
+                    <p class="contact-innner">+63 931 63 4056</p>
+                </div>
+            </div>
+
+            <!-- Second column for email -->
+            <div class="container row mb-4">
+                <div class="col d-flex align-items-center">
+                    <img src="~/images/mail_icon_contact.png" class="contact-img">
+                    <p class="contact-innner">abarrolawoffice@gmail.com</p>
+                </div>
+            </div>
+
+            <!-- Third column for Facebook link -->
+            <div class="container row">
+                <div class="col d-flex align-items-center">
+                    <img src="~/images/fb_icon_contact.png" class="contact-img">
+                    <p class="contact-innner">facebook.com/Law.Abarro/</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
