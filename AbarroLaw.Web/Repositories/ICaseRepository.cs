@@ -7,8 +7,8 @@ namespace AbarroLaw.Web.Repositories
         //Get all practice for practice viewing (View all practice View)
         Task<IEnumerable<CasePost>> GetAllCaseAsync();
 
-        //Get All Practice for Practice Area View (for user view)
-        Task<List<CasePost>> GetAllCaseAsyncForUser();
+        //Get cases based on practice tag
+        Task<IEnumerable<CasePost>> GetCasePostsByPracticeNameAsync(string practiceName);
 
         //Get Single Practice for Edit
         Task<CasePost?> GetCaseAsync(Guid id);

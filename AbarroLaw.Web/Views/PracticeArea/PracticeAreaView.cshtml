@@ -48,8 +48,8 @@
     }
 
     .card-images {
-        height: 20vh;
-        filter: brightness(65%);
+        height: 22vh;
+        filter: brightness(45%);
     }
 </style>
 
@@ -100,15 +100,17 @@
                     {
                         <div class="col">
                             <div class="card mb-3" style="width: 18rem;">
-                                <div class="position-relative">
-                                    <img src="@Url.Content("~/" + practice.PracticeImageURL)" class="card-img-top card-images">
+                                <div class="position-relative mx-3 mt-2">
+                                    <img src="@Url.Content("~/" + practice.PracticeImageURL)" class="card-img card-images">
                                     <div class="position-absolute top-50 start-50 translate-middle">
                                         <h4 class="card-title text-center">@practice.PracticeName</h4>
                                     </div>
                                 </div>
                                 <div class="card-body">
                                     <p class="card-text">@practice.PracticeDescription</p>
-                                    <a href="#" class="btn btn-primary">Learn more >></a>
+                                    <a class="btn btn-primary float-end" asp-controller="PracticeArea" asp-action="PracticeAreaDynamic" asp-route-practiceName="@practice.PracticeName">
+                                        See Cases >>
+                                    </a>
                                 </div>
                             </div>
                         </div>

@@ -85,7 +85,8 @@
         <div class="container row mb-3">
             <div class="form-group">
                 <label>Enter the short description:</label>
-                <textarea class="form-control col-md-8 col-sm-12 desc-area" id="shortDesc" asp-for="ShortDescription"></textarea>
+                <textarea class="form-control col-md-8 col-sm-12 desc-area" id="shortDesc" asp-for="ShortDescription" oninput="limitTextArea(this, 200)"></textarea>
+                <p id="charLimitIndicator">Remaining characters: 200</p>
             </div>
         </div>
 
@@ -161,7 +162,27 @@
 {
     <script>
         //Froala editor
-        var editor = new FroalaEditor('#content');
+        // Initialize the Froala Editor
+        var editor = new FroalaEditor('#content', {
+            imageUploadURL: '/api/images'
+        });
+
+        // for character indicator
+        var charLimitIndicator = document.getElementById('charLimitIndicator');
+
+        function limitTextArea(element, maxChars) {
+            if (element.value.length > maxChars) {
+                element.value = element.value.slice(0, maxChars);
+                element.blur();
+
+                charLimitIndicator.textContent = 'Maximum character limit reached.';
+                charLimitIndicator.style.color = 'red';
+            }
+            else {
+                charLimitIndicator.textContent = 'Remaining characters: ' + (maxChars - element.value.length);
+                charLimitIndicator.style.color = 'black';
+            }
+        }
 
 
         //Image upload

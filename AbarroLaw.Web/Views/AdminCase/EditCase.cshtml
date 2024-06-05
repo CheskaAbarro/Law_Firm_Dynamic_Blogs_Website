@@ -92,8 +92,8 @@
         @* Short Description *@
         <div class="container row mb-3">
             <div class="form-group">
-                <label>Enter the short description:</label>
-                <textarea class="form-control col-md-8 col-sm-12 desc-area" id="shortDesc" asp-for="ShortDescription"></textarea>
+                <textarea class="form-control col-md-8 col-sm-12 desc-area" id="shortDesc" asp-for="ShortDescription" oninput="limitTextArea(this, 200)"></textarea>
+                <p id="charLimitIndicator">Remaining characters: <span id="remainingChars">200</span></p>
             </div>
         </div>
 
@@ -183,7 +183,38 @@
 @section Scripts
 {
     <script>
+        //Froala editor
         var editor = new FroalaEditor('#content');
+
+        // Character Limit on Desc
+        var charLimitIndicator = document.getElementById('charLimitIndicator');
+
+        function updateCharacterCount(element, remainingChars) {
+            var currentChars = element.value.length;
+            var remaining = remainingChars - currentChars;
+
+            charLimitIndicator.textContent = 'Remaining characters: ' + remaining;
+            charLimitIndicator.style.color = remaining >= 0 ? 'black' : 'red';
+        }
+
+        function limitTextArea(element, maxChars) {
+            if (element.value.length > maxChars) {
+                element.value = element.value.slice(0, maxChars);
+                element.blur();
+
+                charLimitIndicator.textContent = 'Maximum character limit reached.';
+                charLimitIndicator.style.color = 'red';
+            } else {
+                updateCharacterCount(element, maxChars);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var textarea = document.getElementById('shortDesc');
+            var maxChars = 200; // Your maximum character limit
+
+            limitTextArea(textarea, maxChars);
+        });
 
         //Image upload
         const featuredImgUploadElement = document.getElementById('featuredImgUpload');

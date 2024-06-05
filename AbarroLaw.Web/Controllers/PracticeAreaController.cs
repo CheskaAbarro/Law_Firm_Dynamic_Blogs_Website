@@ -19,10 +19,10 @@ namespace AbarroLaw.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> PracticeAreaView()
         {
-            var otherPractices = await practiceRepository.GetAllPracticesAsyncForUser();
-            if (otherPractices != null && otherPractices.Any())
+            var allPractices = await practiceRepository.GetAllPracticesAsyncForUser();
+            if (allPractices != null && allPractices.Any())
             {
-                return View(otherPractices);
+                return View(allPractices);
             }
             else
             {
@@ -32,11 +32,18 @@ namespace AbarroLaw.Web.Controllers
         }
 
         //Practice Area Dynamic (based on DB) -----------------------
-        public async Task<IActionResult> PracticeAreaDynamic()
+        public async Task<IActionResult> PracticeAreaDynamic(string practiceName)
         {
-            var casePosts = await caseRepository.GetAllCaseAsync();
+            if (string.IsNullOrEmpty(practiceName))
+            {
+                return BadRequest("No cases related on the practice!");
+            }
+            else
+            {
+                var casePosts = await caseRepository.GetCasePostsByPracticeNameAsync(practiceName);
 
-            return View(casePosts);
+                return View(casePosts);
+            }
         }
 
 

@@ -28,16 +28,23 @@ namespace AbarroLaw.Web.Repositories
             return await abarroLawDbContext.CasePosts.Include(x => x.Practices).ToListAsync();
         }
 
-        //Get All Practice for Practice Area View (for user view)
-        public Task<List<CasePost>> GetAllCaseAsyncForUser()
+        //Get cases based on practice tag
+        public async Task<IEnumerable<CasePost>> GetCasePostsByPracticeNameAsync(string practiceName)
         {
-            throw new NotImplementedException();
+            var practiceCasePost = await abarroLawDbContext.CasePosts
+                                .Include(x => x.Practices)
+                                .Where(cp => cp.Practices.Any(p => p.PracticeName == practiceName))
+                                .ToListAsync();
+
+            return practiceCasePost;
         }
 
         //Get Single Practice for Edit
         public async Task<CasePost?> GetCaseAsync(Guid id)
         {
-           return await abarroLawDbContext.CasePosts.Include(x => x.Practices).FirstOrDefaultAsync(p => p.Id == id);
+           return await abarroLawDbContext.CasePosts
+                .Include(x => x.Practices)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         //Edit -------------
@@ -84,5 +91,7 @@ namespace AbarroLaw.Web.Repositories
                 return null;
             }
         }
+
+        
     }
 }

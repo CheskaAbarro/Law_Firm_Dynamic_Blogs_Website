@@ -7,6 +7,7 @@
 <style>
     body {
         overflow-x: hidden;
+        font-family: Poppins;
     }
 
     .flex-container {
@@ -38,6 +39,15 @@
         font-size: 3.5vw;
         font-weight: bold;
     }
+
+    .case-img {
+        height: 35vh;
+        /* filter: brightness(100%); */
+    }
+
+    .card {
+        width: 25rem;
+    }
 </style>
 
 
@@ -48,29 +58,31 @@
     <h1 class="landing-title mt-4">This Practice</h1>
 </div>
 
-<div class="container d-flex flex-column align-items-center about-us mb-5" style="height: auto;">
+<div class="container d-flex flex-column align-items-center" style="height: auto;">
     <div style="letter-spacing: 0.5em;">
         <h2>- This Practice Case Posts -</h2>
     </div>
 </div>
 
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-6">
+    <div class="row row-cols-auto d-flex justify-content-center">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
             @if (Model != null && Model.Any())
-            {
+            {                
                 foreach (var casePost in Model)
                 {
-                    <div class="mb-5 bg-light box-shadow">
+                    <div class="card mb-3 bg-light box-shadow mx-3">
                         @* for image *@
-                        <img src="~/images/practice/all_practice.png" alt="@casePost.Heading" class="mb-2 d-block img-fluid"/>
+                        <div class="mb-2 bg-light box-shadow d-flex justify-content-center mt-2">
+                            <img src="@Url.Content("~/" + casePost.FeaturedImgURL)" alt="@casePost.Heading" class="card-img mb-2 d-block img-fluid case-img" />
+                        </div>
 
                         @* Heading and date *@
-                        <h2 class="mb-4">@casePost.Heading</h2>
-                        <p class="mb-2">Publish Date: @casePost.PublishedDate.ToShortDateString()</p>
+                        <h3 class="mb-1 text-uppercase">@casePost.Heading</h3>
+                        <p class="mb-0">Publish Date: @casePost.PublishedDate.ToShortDateString()</p>
 
                         @* Practice area *@
-                        <p class="mb-4">
+                        <p class="mb-3">
                             @foreach (var practice in casePost.Practices)
                             {
                                 <span class="badge bg-secondary me-1">@practice.PracticeName</span>
@@ -79,10 +91,15 @@
 
                         @* Summary *@
                         <p class="mb-4">@casePost.ShortDescription</p>
-
-                        <a class="btn btn-dark" href="">Read more >></a>
+                        <div class="card-body mt-auto">
+                            <a class="btn btn-dark float-end" href="">Read more >></a>
+                        </div>
                     </div>
                 }
+            }
+            else
+            {
+                <h4>No case posts found for the selected practice.</h4>
             }
         </div>
     </div>

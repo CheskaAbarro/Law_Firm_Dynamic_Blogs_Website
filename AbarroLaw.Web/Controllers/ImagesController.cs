@@ -28,6 +28,7 @@ namespace AbarroLaw.Web.Controllers
             }
             else
             {
+
                 return new JsonResult(new { link = imageURL });
             }
 
