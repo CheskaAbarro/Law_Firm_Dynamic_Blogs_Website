@@ -97,19 +97,31 @@
             </div>
         </div>
 
-        @* Featured Image *@
+        @* Feature Image Upload *@
         <div class="container row mb-3">
             <div class="form-group">
-                <label>Choose featured image:</label>
-                <input type="text" class="form-control" id="featuredImage" asp-for="FeaturedImg" />
+                <label>Featured image upload:</label>
+                <div class="input-group">
+                    <input type="file" class="form-control" id="featuredImgUpload">
+                    <input type="hidden" id="featuredImageFileName" asp-for="FeaturedImg" />
+                </div>
+
+                @if (Model.FeaturedImgURL != null)
+                {
+                    <img src="@Url.Content("~/" + Model.FeaturedImgURL)" id="featuredImageDisplay" style="display: block; width: 20vh;" />
+                }
+                else
+                {
+                    <img src="" id="featuredImageDisplay" style="display: none; width: 20vh;" />
+                }
             </div>
         </div>
 
-        @* Featured Image URL *@
+        @* Feature Image URL *@
         <div class="container row mb-3">
             <div class="form-group">
-                <label>Featured image URL:</label>
-                <input type="text" class="form-control" id="featuredImageURL" asp-for="FeaturedImgURL" />
+                <label>Featured upload URL:</label>
+                <input type="text" class="form-control" id="featuredImgUploadURL" readonly asp-for="FeaturedImgURL" />
             </div>
         </div>
 
@@ -173,6 +185,52 @@
     <script>
         var editor = new FroalaEditor('#content');
 
-       
+        //Image upload
+        const featuredImgUploadElement = document.getElementById('featuredImgUpload');
+        const featuredImageFileNameElement = document.getElementById('featuredImageFileName');
+        const featuredImgUploadURLElement = document.getElementById('featuredImgUploadURL');
+        const featuredImageDisplayElement = document.getElementById('featuredImageDisplay');
+
+
+        async function uploadFeaturedImage(e) {
+            console.log(e.target.files[0]);
+
+            let data = new FormData();
+            data.append('file', e.target.files[0]);
+
+            await fetch('/api/images', {
+                method: 'POST',
+                headers: {
+                    'Accept': '*/*',
+                },
+                body: data
+            }).then(response => response.json())
+                .then(result => {
+                    //checking the link in console
+                    console.log(result);
+
+                    //Adjust the URL to remove the controller name
+                    let imageUrl = result.link;
+                    let currentUrl = window.location.href;
+                    let controllerNameIndex = currentUrl.indexOf("AdminCase");
+
+                    if (controllerNameIndex !== -1) {
+                        //Remove controller name if it exist
+                        let baseUrl = currentUrl.substring(0, controllerNameIndex);
+                        imageUrl = baseUrl + imageUrl;
+                    }
+
+                    //for getting only the file name
+                    const fileName = featuredImgUploadElement.files[0].name;
+
+                    featuredImgUploadURLElement.value = result.link
+                    featuredImageFileNameElement.value = fileName;
+                    featuredImageDisplayElement.src = imageUrl;
+                    featuredImageDisplayElement.style.display = 'block';
+
+                });
+        }
+        featuredImgUploadElement.addEventListener('change', uploadFeaturedImage);
+
     </script>
 }
