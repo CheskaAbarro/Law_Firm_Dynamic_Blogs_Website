@@ -16,9 +16,10 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("AbarroLawConnect
 
 //For Practice Repository
 builder.Services.AddScoped<IPracticeRepository, PracticeRepository>();
-
 //For Case Repository
 builder.Services.AddScoped<ICaseRepository, CaseRepository>();
+//For image upload repository (Local folder)
+builder.Services.AddScoped<IImageRepository, FolderImageRepository>();
 
 var app = builder.Build();
 

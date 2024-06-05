@@ -26,38 +26,22 @@ namespace AbarroLaw.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> SubmitPractice(AddPracticeRequest addPracticeRequest)
         {
-            //for image
-            string? serverFolder = null;
-            string? imageRelativePath = null;
-
-            if (addPracticeRequest.PracticeImage != null)
-            {
-                string folder = "images/uploads/practice_img/";
-                var uniqueName = Guid.NewGuid().ToString() + "_" + addPracticeRequest.PracticeImage.FileName;
-                imageRelativePath = Path.Combine(folder, uniqueName).Replace("\\", "/");
-                serverFolder = Path.Combine(webHostEnvironment.WebRootPath, folder, uniqueName);
-
-                //await addPracticeRequest.PracticeImage.CopyToAsync(new FileStream (serverFolder, FileMode.Create));
-                using (var fileStream = new FileStream(serverFolder, FileMode.Create))
-                {
-                    await addPracticeRequest.PracticeImage.CopyToAsync(fileStream);
-                }
-            }
 
             var practiceModel = new Practice
             {
                 PracticeName = addPracticeRequest.PracticeName,
                 PracticeDescription = addPracticeRequest.PracticeDescription,
-                PracticeImage = imageRelativePath,
+                PracticeImage = addPracticeRequest.PracticeImage,
+                PracticeImageURL = addPracticeRequest.PracticeImageURL,
                 Visible = addPracticeRequest.Visible
             };
 
-            practiceModel.PracticeImageURL = serverFolder;
 
             await practiceRepository.AddPracticeAsync(practiceModel);
 
             return RedirectToAction("ViewAllPractice");
         }
+
 
 
         //View All Practice ---------------------------------------------------------------------------------
@@ -82,8 +66,8 @@ namespace AbarroLaw.Web.Controllers
                 {
                     Id = practice.Id,
                     PracticeName = practice.PracticeName,
-                    PracticeDescription= practice.PracticeDescription,
-                    //PracticeImage= practice.PracticeImage,
+                    PracticeDescription = practice.PracticeDescription,
+                    PracticeImage = practice.PracticeImage,
                     PracticeImageURL = practice.PracticeImageURL,
                     Visible = practice.Visible
                 };
@@ -102,12 +86,12 @@ namespace AbarroLaw.Web.Controllers
                 Id = editPracticeRequest.Id,
                 PracticeName = editPracticeRequest.PracticeName,
                 PracticeDescription = editPracticeRequest.PracticeDescription,
-                //PracticeImage = editPracticeRequest.PracticeImage,
-                PracticeImageURL= editPracticeRequest.PracticeImageURL,
+                PracticeImage = editPracticeRequest.PracticeImage,
+                PracticeImageURL = editPracticeRequest.PracticeImageURL,
                 Visible = editPracticeRequest.Visible
             };
 
-            var updatePractice =  await practiceRepository.UpdatePracticeAsync(practice);
+            var updatePractice = await practiceRepository.UpdatePracticeAsync(practice);
 
             if (updatePractice != null)
             {
@@ -121,10 +105,11 @@ namespace AbarroLaw.Web.Controllers
         }
 
 
+
         //Delete --------------------------------------------------------------------------------------------
-        public async Task<IActionResult> DeletePractice (EditPracticeRequest editPracticeRequest)
+        public async Task<IActionResult> DeletePractice(EditPracticeRequest editPracticeRequest)
         {
-            var deletePractice = await practiceRepository.DeletePracticeAsync (editPracticeRequest.Id);
+            var deletePractice = await practiceRepository.DeletePracticeAsync(editPracticeRequest.Id);
 
             if (deletePractice != null)
             {
@@ -132,7 +117,7 @@ namespace AbarroLaw.Web.Controllers
             }
             else
             {
-                return RedirectToAction("EditPractice", new {id = editPracticeRequest.Id});
+                return RedirectToAction("EditPractice", new { id = editPracticeRequest.Id });
             }
 
         }

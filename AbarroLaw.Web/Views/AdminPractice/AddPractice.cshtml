@@ -81,10 +81,24 @@
             </div>
         </div>
 
-        @* Practice Image *@
-        <div class="container row mb-3 mt-0">
-            <div class="input-group">
-                <input type="file" class="form-control" id="practiceImg" asp-for="PracticeImage">
+        @* Practice Image Upload *@
+        <div class="container row mb-3">
+            <div class="form-group">
+                <label>Practice area image upload:</label>
+                <div class="input-group">
+                    <input type="file" class="form-control" id="practiceImgUpload">
+                    <input type="hidden" id="practiceImageFileName" asp-for="PracticeImage"/>
+                </div>
+
+                <img src="" id="practiceImageDisplay" style="display: none; width: 20vh;" />
+            </div>
+        </div>
+
+        @* Practice Image URL *@
+        <div class="container row mb-3">
+            <div class="form-group">
+                <label>Image upload URL:</label>
+                <input type="text" class="form-control" id="practiceImgUploadURL" readonly asp-for="PracticeImageURL"/>
             </div>
         </div>
 
@@ -113,6 +127,7 @@
 
 <script>
 
+    // for character indicator
     var charLimitIndicator = document.getElementById('charLimitIndicator');
 
     function limitTextArea(element, maxChars) {
@@ -128,4 +143,56 @@
             charLimitIndicator.style.color = 'black';
         }
     }
+
+    //Image upload
+    const practiceImgUploadElement = document.getElementById('practiceImgUpload');
+    const practiceImageFileNameElement = document.getElementById('practiceImageFileName');
+    const practiceImgUploadURLElement = document.getElementById('practiceImgUploadURL');
+    const practiceImageDisplayElement = document.getElementById('practiceImageDisplay');
+
+    async function uploadPracticeImage(e) {
+        console.log(e.target.files[0]);
+
+        let data = new FormData();
+        data.append('file', e.target.files[0]);
+
+        await fetch('/api/images', {
+            method: 'POST',
+            headers: {
+                'Accept': '*/*',
+            },
+            body: data
+        }).then(response => response.json())
+            .then(result => {
+                //checking the link in console
+                console.log(result);
+
+                //Adjust the URL to remove the controller name
+                let imageUrl = result.link;
+                let currentUrl = window.location.href;
+                let controllerNameIndex = currentUrl.indexOf("AdminPractice");
+
+                if (controllerNameIndex !== -1) {
+                    //Remove controller name if it exist
+                    let baseUrl = currentUrl.substring(0, controllerNameIndex);
+                    imageUrl = baseUrl + imageUrl;
+                }
+
+                //for getting only the file name
+                const fileName = practiceImgUploadElement.files[0].name;
+
+                practiceImgUploadURLElement.value = result.link
+                practiceImageFileNameElement.value = fileName;
+                practiceImageDisplayElement.src = imageUrl;
+                practiceImageDisplayElement.style.display = 'block';
+
+
+                //Direct link without removing the controller name
+                // practiceImgUploadURLElement.value = result.link;
+                // practiceImageDisplayElement.src = result.link;
+                // practiceImageDisplayElement.style.display = 'block';
+            });
+    }
+    practiceImgUploadElement.addEventListener('change', uploadPracticeImage);
+
 </script>

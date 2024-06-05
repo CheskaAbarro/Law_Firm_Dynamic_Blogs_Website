@@ -49,6 +49,7 @@
 
     .card-images {
         height: 20vh;
+        filter: brightness(65%);
     }
 </style>
 
@@ -100,7 +101,7 @@
                         <div class="col">
                             <div class="card mb-3" style="width: 18rem;">
                                 <div class="position-relative">
-                                    <img src="@Url.Content("~/" + practice.PracticeImage)" class="card-img-top card-images">
+                                    <img src="@Url.Content("~/" + practice.PracticeImageURL)" class="card-img-top card-images">
                                     <div class="position-absolute top-50 start-50 translate-middle">
                                         <h4 class="card-title text-center">@practice.PracticeName</h4>
                                     </div>

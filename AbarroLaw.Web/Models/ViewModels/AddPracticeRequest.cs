@@ -6,7 +6,7 @@
 
         public string PracticeDescription { get; set; }
 
-        public IFormFile PracticeImage { get; set; }
+        public string PracticeImage { get; set; }
 
         public string PracticeImageURL { get; set; }
 
