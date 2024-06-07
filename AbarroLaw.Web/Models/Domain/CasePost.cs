@@ -16,6 +16,8 @@
 
         public string? FeaturedImgURL { get; set; }
 
+        public string UrlHandle { get; set; }
+
         public DateTime PublishedDate { get; set; }
 
         public string Visible { get; set; }

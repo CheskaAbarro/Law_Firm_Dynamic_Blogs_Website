@@ -1,0 +1,94 @@
+﻿@model AbarroLaw.Web.Models.Domain.CasePost
+
+@{
+}
+
+
+<style>
+    body {
+        overflow-x: hidden;
+        font-family: Poppins;
+    }
+
+    .flex-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40vh; /* Adjust as necessary */
+        text-align: center;
+    }
+
+    .bg-img {
+        height: 40vh;
+        width: 100vw;
+        object-fit: cover;
+        filter: brightness(50%);
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        background-color: gray;
+    }
+
+    .landing-title {
+        font-family: Poppins;
+        color: white;
+        letter-spacing: 0.2em;
+        line-height: 1.5em;
+        text-align: center;
+        font-size: 3.5vw;
+        font-weight: bold;
+    }
+</style>
+
+
+
+@* Landing ------------------------------------------------------------------- *@
+<div class="flex-container mt-0 pt-0">
+    <img class="bg-img"/>
+    <h1 class="landing-title mt-5 pt-5">
+        @Model.Heading
+    </h1>
+</div>
+
+<div class="container py-2 mt-3">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            @if (Model != null)
+            {
+                <h1 class="mb-1">@Model.Heading</h1>
+
+                @* publish date *@
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-secondary">@Model.PublishedDate</span>
+                </div>
+
+                @* Practices *@
+                <div class="mb-3">
+                    @foreach (var practices in Model.Practices)
+                    {
+                        <span class="badge bg-secondary">@practices.PracticeName</span>
+                    }
+                </div>
+
+                @* Featured Image *@
+                <img class="d-block img-fluid mb-3" src="@Url.Content("~/" + Model.FeaturedImgURL)"/>
+
+                @* contents *@
+                <div class="mb-3">
+                    <p>
+                        @Html.Raw(@Model.Content)
+                    </p>
+                </div>
+            }
+            else
+            {
+                <h2>Case does not exist!</h2>
+            }
+
+
+        </div>
+
+    </div>
+</div>

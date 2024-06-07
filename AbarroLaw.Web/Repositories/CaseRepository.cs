@@ -29,14 +29,27 @@ namespace AbarroLaw.Web.Repositories
         }
 
         //Get cases based on practice tag
-        public async Task<IEnumerable<CasePost>> GetCasePostsByPracticeNameAsync(string practiceName)
+        async Task<(IEnumerable<CasePost> casePosts, string practiceImg)> ICaseRepository.GetCasePostsByPracticeNameAsync(string practiceName)
         {
             var practiceCasePost = await abarroLawDbContext.CasePosts
                                 .Include(x => x.Practices)
                                 .Where(cp => cp.Practices.Any(p => p.PracticeName == practiceName))
                                 .ToListAsync();
 
-            return practiceCasePost;
+            var practiceImg = await abarroLawDbContext.Practices
+                                .Where(p => p.PracticeName == practiceName)
+                                .Select(p => p.PracticeImageURL)
+                                .FirstOrDefaultAsync();
+
+            return (practiceCasePost, practiceImg);
+        }
+
+        //Get URL handle for single-page case post viewing
+        public async Task<CasePost> GetUrlHandle(string urlHandle)
+        {
+            return await abarroLawDbContext.CasePosts.Include(x => x.Practices).FirstOrDefaultAsync(x => x.UrlHandle == urlHandle);
+
+            
         }
 
         //Get Single Practice for Edit
@@ -61,6 +74,7 @@ namespace AbarroLaw.Web.Repositories
                 existingCase.ShortDescription = casePost.ShortDescription;
                 existingCase.FeaturedImg = casePost.FeaturedImg;
                 existingCase.FeaturedImgURL = casePost.FeaturedImgURL;
+                existingCase.UrlHandle = casePost.UrlHandle;
                 existingCase.PublishedDate = casePost.PublishedDate;
                 existingCase.Visible = casePost.Visible;
                 existingCase.Practices = casePost.Practices;
@@ -92,6 +106,5 @@ namespace AbarroLaw.Web.Repositories
             }
         }
 
-        
     }
 }

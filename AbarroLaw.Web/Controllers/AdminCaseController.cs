@@ -48,6 +48,8 @@ namespace AbarroLaw.Web.Controllers
                 }
             }
 
+            var UrlHandleMaker = GenerateUrlHandle(addCaseRequest.Heading);
+
             //Mapping input values to send to DB
             var casePost = new CasePost
             {
@@ -57,6 +59,7 @@ namespace AbarroLaw.Web.Controllers
                 ShortDescription = addCaseRequest.ShortDescription,
                 FeaturedImg = addCaseRequest.FeaturedImg,
                 FeaturedImgURL = addCaseRequest.FeaturedImgURL,
+                UrlHandle = UrlHandleMaker,
                 PublishedDate = addCaseRequest.PublishedDate,
                 Visible = addCaseRequest.Visible,
                 Practices = selectedPractices
@@ -66,6 +69,11 @@ namespace AbarroLaw.Web.Controllers
             await caseRepository.AddCaseAsync(casePost);
 
             return RedirectToAction("ViewAllCase");
+        }
+
+        private string GenerateUrlHandle(string input)
+        {
+            return input.Replace(" ", "-").ToLower();
         }
 
 
@@ -97,6 +105,7 @@ namespace AbarroLaw.Web.Controllers
                     FeaturedImg = casePost.FeaturedImg,
                     FeaturedImgURL = casePost.FeaturedImgURL,
                     PublishedDate = casePost.PublishedDate,
+                    
                     Visible = casePost.Visible,
                     Practices = practiceDomainModel.Select(x => new SelectListItem
                     {
@@ -118,6 +127,8 @@ namespace AbarroLaw.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> EditCase(EditCaseRequest editCaseRequest)
         {
+            var urlHandleMaker = GenerateUrlHandle(editCaseRequest.Heading);
+
             //Assign values to edit request
             var casePostModel = new CasePost
             {
@@ -128,6 +139,7 @@ namespace AbarroLaw.Web.Controllers
                 ShortDescription = editCaseRequest.ShortDescription,
                 FeaturedImg = editCaseRequest.FeaturedImg,
                 FeaturedImgURL = editCaseRequest.FeaturedImgURL,
+                UrlHandle = urlHandleMaker,
                 PublishedDate = editCaseRequest.PublishedDate,
                 Visible = editCaseRequest.Visible
             };

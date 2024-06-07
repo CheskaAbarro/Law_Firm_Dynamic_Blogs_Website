@@ -1,4 +1,5 @@
-﻿using AbarroLaw.Web.Repositories;
+﻿using AbarroLaw.Web.Models.ViewModels;
+using AbarroLaw.Web.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AbarroLaw.Web.Controllers
@@ -40,9 +41,18 @@ namespace AbarroLaw.Web.Controllers
             }
             else
             {
-                var casePosts = await caseRepository.GetCasePostsByPracticeNameAsync(practiceName);
+                var result = await caseRepository.GetCasePostsByPracticeNameAsync(practiceName);
+                var casePosts = result.casePosts;
+                var practiceImageUrl = result.practiceImg;
 
-                return View(casePosts);
+                var dynamicModel = new GetPracticeandCaseRequest
+                {
+                    PracticeName = practiceName,
+                    PracticeImageUrl = practiceImageUrl,
+                    CasePosts = casePosts.ToList()
+                };
+
+                return View(dynamicModel);
             }
         }
 

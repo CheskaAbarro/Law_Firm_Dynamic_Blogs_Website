@@ -156,7 +156,7 @@
         let data = new FormData();
         data.append('file', e.target.files[0]);
 
-        await fetch('/api/images', {
+        await fetch('/api/images/upload-image', {
             method: 'POST',
             headers: {
                 'Accept': '*/*',

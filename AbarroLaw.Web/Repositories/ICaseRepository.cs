@@ -8,7 +8,10 @@ namespace AbarroLaw.Web.Repositories
         Task<IEnumerable<CasePost>> GetAllCaseAsync();
 
         //Get cases based on practice tag
-        Task<IEnumerable<CasePost>> GetCasePostsByPracticeNameAsync(string practiceName);
+        Task<(IEnumerable<CasePost> casePosts, string practiceImg)> GetCasePostsByPracticeNameAsync(string practiceName);
+
+        //Get URL by handle for single case post viewing
+        Task<CasePost> GetUrlHandle(string urlHandle);
 
         //Get Single Practice for Edit
         Task<CasePost?> GetCaseAsync(Guid id);

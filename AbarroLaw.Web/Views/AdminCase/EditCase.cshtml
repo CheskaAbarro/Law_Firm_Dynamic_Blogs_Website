@@ -184,7 +184,26 @@
 {
     <script>
         //Froala editor
-        var editor = new FroalaEditor('#content');
+        // Initialize the Froala Editor
+        var editor = new FroalaEditor('#content', {
+            imageUploadURL: '/api/images/upload-editor-image',
+            events: {
+                'image.uploaded': function (response) {
+                    // Parse the response to get the image link
+                    let responseObj = JSON.parse(response);
+                    let imageUrl = responseObj.link;
+
+                    // Log the image link to the console
+                    console.log("Image uploaded successfully. Image URL:", imageUrl);
+                },
+                'image.inserted': function ($img, response) {
+                    console.log("Image inserted:", $img[0].src);
+                },
+                'image.error': function (error, response) {
+                    console.log("Image upload error:", error, response);
+                }
+            }
+        });
 
         // Character Limit on Desc
         var charLimitIndicator = document.getElementById('charLimitIndicator');
@@ -229,7 +248,7 @@
             let data = new FormData();
             data.append('file', e.target.files[0]);
 
-            await fetch('/api/images', {
+            await fetch('/api/images/upload-image', {
                 method: 'POST',
                 headers: {
                     'Accept': '*/*',

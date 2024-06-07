@@ -17,7 +17,7 @@ namespace AbarroLaw.Web.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("upload-image")]
         public async Task<IActionResult> UploadImageAsync(IFormFile file)
         {
             
@@ -28,10 +28,24 @@ namespace AbarroLaw.Web.Controllers
             }
             else
             {
-
                 return new JsonResult(new { link = imageURL });
             }
+        }
 
+        [HttpPost("upload-editor-image")]
+        public async Task<IActionResult> UploadImageEditorAsync(IFormFile file)
+        {
+
+            var imageURL = await imageRepository.UploadImageAsync(file);
+            if (imageURL == null)
+            {
+                return Problem("Something went wrong! ", null, (int)HttpStatusCode.InternalServerError);
+            }
+            else
+            {
+                var correctImageUrl = Url.Content("~/images/uploads/") + Path.GetFileName(imageURL);
+                return new JsonResult(new { link = correctImageUrl });
+            }
         }
     }
 }

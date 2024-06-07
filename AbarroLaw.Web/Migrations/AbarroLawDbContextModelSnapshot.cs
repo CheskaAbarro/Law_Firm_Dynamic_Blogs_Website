@@ -53,6 +53,10 @@ namespace AbarroLaw.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UrlHandle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Visible")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
