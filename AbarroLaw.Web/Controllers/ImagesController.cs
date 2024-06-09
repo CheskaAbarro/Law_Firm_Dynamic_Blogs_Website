@@ -22,7 +22,7 @@ namespace AbarroLaw.Web.Controllers
         {
             
             var imageURL = await imageRepository.UploadImageAsync(file);
-            if (imageURL == null)
+            if (imageURL == null) 
             {
                 return Problem("Something went wrong! ", null, (int)HttpStatusCode.InternalServerError);
             }

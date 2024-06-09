@@ -1,4 +1,4 @@
-﻿
+﻿@model AbarroLaw.Web.Models.ViewModels.AddEmailRequest
 @{
 }
 
@@ -108,42 +108,50 @@
             </div>
 
             <!-- First column for phone number -->
-            @* Name *@
-            <div class="container row mb-3">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Enter your name">
+            <form method="post">
+                @* Name *@
+                <div class="container row mb-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Enter your name" asp-for="SenderName" >
+                    </div>
                 </div>
-            </div>
-            @* Email *@
-            <div class="container row mb-3">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Email">
-                    <input type="text" class="form-control ms-4" placeholder="Phone">
+
+                @* Email *@
+                <div class="container row mb-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Email" asp-for="Email" pattern=".com" required>
+                        <input type="text" class="form-control ms-4" placeholder="Phone" asp-for="Phone">
+                    </div>
                 </div>
-            </div>
-            @* Practice area *@
-            <div class="container row mb-3">
-                <div class="input-group">
-                    <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-                        <option selected>Choose...</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
+
+                @* Date Sent *@
+                <input type="hidden" id="currentDateTime" asp-for="DateSent"/>
+
+                @* Message Title *@
+                <div class="container row">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Enter message title" id="messageTitle" oninput="limitTextArea(this, 50)" asp-for="MessageTitle">
+                    </div>
+                    <p id="charLimitIndicator" style="color: gray;">Remaining characters: 50</p>
                 </div>
-            </div>
-            @* Enter message *@
-            <div class="container row mb-3">
-                <div class="form-group">
-                    <textarea class="form-control col-md-8 col-sm-12" placeholder="Enter message" style="height: 200px; resize: none;"></textarea>
+
+                @* Enter message *@
+                <div class="container row mb-3">
+                    <div class="form-group">
+                        <textarea class="form-control col-md-8 col-sm-12" placeholder="Enter message" style="height: 200px; resize: none;" asp-for="SenderMessage"></textarea>
+                    </div>
                 </div>
-            </div>
-            @* Button *@
-            <div class="container row mb-3">
-                <div class="col-auto ms-auto">
-                    <button class="btn btn-primary">Submit</button>
+
+                @* Button *@
+                <div class="container row mb-3">
+                    <div class="col-auto ms-auto">
+                        <button class="btn btn-primary" asp-controller="Contact" asp-action="SendMessage">
+                            Submit
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </form>
+            
         </div>
 
         <!-- Image with details -->
@@ -188,3 +196,26 @@
 </div>
 
 
+
+<script>
+
+    const currentDateTime = new Date();
+    document.getElementById('currentDateTime').value = currentDateTime.toISOString();
+
+    // for character indicator
+    var charLimitIndicator = document.getElementById('charLimitIndicator');
+
+    function limitTextArea(element, maxChars) {
+        if (element.value.length > maxChars) {
+            element.value = element.value.slice(0, maxChars);
+            element.blur();
+
+            charLimitIndicator.textContent = 'Maximum character limit reached.';
+            charLimitIndicator.style.color = 'red';
+        }
+        else {
+            charLimitIndicator.textContent = 'Remaining characters: ' + (maxChars - element.value.length);
+            charLimitIndicator.style.color = 'black';
+        }
+    }
+</script>

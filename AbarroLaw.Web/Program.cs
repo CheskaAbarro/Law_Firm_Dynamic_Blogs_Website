@@ -20,6 +20,8 @@ builder.Services.AddScoped<IPracticeRepository, PracticeRepository>();
 builder.Services.AddScoped<ICaseRepository, CaseRepository>();
 //For image upload repository (Local folder)
 builder.Services.AddScoped<IImageRepository, FolderImageRepository>();
+//For message inquiries
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 var app = builder.Build();
 

@@ -1,5 +1,4 @@
-﻿@model List<AbarroLaw.Web.Models.Domain.Practice>
-
+﻿@model List<AbarroLaw.Web.Models.Domain.EmailMessage>
 
 @{
     ViewBag.ShowFooter = false;
@@ -16,12 +15,12 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 40vh; /* Adjust as necessary */
+        height: 35vh; /* Adjust as necessary */
         text-align: center;
     }
 
     .bg-img {
-        height: 40vh;
+        height: 35vh;
         width: 100vw;
         object-fit: cover;
         filter: brightness(0.7);
@@ -29,7 +28,7 @@
         top: 0;
         left: 0;
         z-index: -1;
-        background-color: #0A3232;
+        background-color: #102250;
     }
 
     .landing-title {
@@ -41,15 +40,14 @@
         font-weight: bold;
     }
 
-    .auto-width {
-        width: auto;
+
+    .auto-width div {
+        width: 150px; /* Adjust the width as needed */
+        max-width: 150px; /* Ensure the width doesn't exceed this value */
+        overflow: hidden;
+        text-overflow: ellipsis;
         white-space: nowrap;
     }
-
-    /* th, td {
-        font-family: Poppins;
-    } */
-
 </style>
 
 
@@ -57,7 +55,7 @@
 <div class="flex-container mt-0 pt-0">
     <div class="bg-img"></div>
     <div class="container d-flex flex-column align-items-center content-wrapper">
-        <h1 class="landing-title mt-5 pt-5">ADMIN - View All Practice</h1>
+        <h1 class="landing-title mt-5 pt-5">ADMIN - View All Inquiries</h1>
     </div>
 </div>
 
@@ -67,38 +65,38 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th class="auto-width">ID</th>
-                    <th class="auto-width">Practice Name</th>
-                    <th class="auto-width">Description</th>
-                    <th class="auto-width">Visible</th>
-                    <th></th>
+                    <th class="col-2">ID</th>
+                    <th class="col-3">Sender Name</th>
+                    <th class="col-3">Email</th>
+                    <th class="col-2">Title</th>
+                    <th class="col-2">Date Sent</th>
+                    <th class="col"></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var practice in Model)
+                @foreach(var messages in Model)
                 {
                     <tr>
-                        <td>@practice.Id</td>
-                        <td>@practice.PracticeName</td>
-                        <td>@practice.PracticeDescription</td>
-                        <td>@practice.Visible</td>
+                        <td>@messages.Id</td>
+                        <td>@messages.SenderName</td>
+                        <td>@messages.Email</td>
+                        <td>@messages.MessageTitle</td>
+                        <td>@messages.DateSent</td>
                         <td>
                             <button class="btn btn-primary">
-                                <a asp-controller="AdminPractice" asp-action="EditPractice" asp-route-id="@practice.Id" style="color: white;">
-                                    Edit
+                                <a asp-controller="Contact" asp-action="ViewInquiry" asp-route-id="@messages.Id" style="color: white;">
+                                    View
                                 </a>
                             </button>
-                            
                         </td>
                     </tr>
                 }
-                
             </tbody>
         </table>
     }
     else
     {
-        <h3>No other practice areas!</h3>
+        <h3>No inquiries yet!</h3>
     }
-    
+
 </div>

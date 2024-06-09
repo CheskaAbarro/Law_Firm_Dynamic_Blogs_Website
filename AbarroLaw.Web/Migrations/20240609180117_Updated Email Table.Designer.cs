@@ -4,6 +4,7 @@ using AbarroLaw.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AbarroLaw.Web.Migrations
 {
     [DbContext(typeof(AbarroLawDbContext))]
-    partial class AbarroLawDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240609180117_Updated Email Table")]
+    partial class UpdatedEmailTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,10 +82,6 @@ namespace AbarroLaw.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MessageTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -104,6 +103,9 @@ namespace AbarroLaw.Web.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("EmailMessageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PracticeDescription")
@@ -128,6 +130,8 @@ namespace AbarroLaw.Web.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmailMessageId");
+
                     b.ToTable("Practices");
                 });
 
@@ -146,6 +150,13 @@ namespace AbarroLaw.Web.Migrations
                     b.ToTable("CasePostPractice");
                 });
 
+            modelBuilder.Entity("AbarroLaw.Web.Models.Domain.Practice", b =>
+                {
+                    b.HasOne("AbarroLaw.Web.Models.Domain.EmailMessage", null)
+                        .WithMany("Practices")
+                        .HasForeignKey("EmailMessageId");
+                });
+
             modelBuilder.Entity("CasePostPractice", b =>
                 {
                     b.HasOne("AbarroLaw.Web.Models.Domain.CasePost", null)
@@ -159,6 +170,11 @@ namespace AbarroLaw.Web.Migrations
                         .HasForeignKey("PracticesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AbarroLaw.Web.Models.Domain.EmailMessage", b =>
+                {
+                    b.Navigation("Practices");
                 });
 #pragma warning restore 612, 618
         }

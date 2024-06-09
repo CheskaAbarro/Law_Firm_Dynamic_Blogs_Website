@@ -13,5 +13,7 @@ namespace AbarroLaw.Web.Data
         public DbSet<Practice> Practices { get; set; }
 
         public DbSet<CasePost> CasePosts { get; set; }
+
+        public DbSet<EmailMessage> Messages { get; set; }
     }
 }
