@@ -1,5 +1,7 @@
 ﻿@model AbarroLaw.Web.Models.ViewModels.AddEmailRequest
+
 @{
+    ViewBag.ShowMessage = false;
 }
 
 <style>
@@ -112,15 +114,16 @@
                 @* Name *@
                 <div class="container row mb-3">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Enter your name" asp-for="SenderName" >
+                        <input type="text" class="form-control" placeholder="Enter your name" asp-for="SenderName" required>
                     </div>
                 </div>
 
                 @* Email *@
                 <div class="container row mb-3">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Email" asp-for="Email" pattern=".com" required>
-                        <input type="text" class="form-control ms-4" placeholder="Phone" asp-for="Phone">
+                        <input type="text" class="form-control" placeholder="Email" asp-for="Email" required>
+
+                        <input type="text" class="form-control ms-4" placeholder="Phone" asp-for="Phone" required>
                     </div>
                 </div>
 
@@ -130,7 +133,7 @@
                 @* Message Title *@
                 <div class="container row">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Enter message title" id="messageTitle" oninput="limitTextArea(this, 50)" asp-for="MessageTitle">
+                        <input type="text" class="form-control" placeholder="Enter message title" id="messageTitle" oninput="limitTextArea(this, 50)" asp-for="MessageTitle" required>
                     </div>
                     <p id="charLimitIndicator" style="color: gray;">Remaining characters: 50</p>
                 </div>
@@ -138,7 +141,7 @@
                 @* Enter message *@
                 <div class="container row mb-3">
                     <div class="form-group">
-                        <textarea class="form-control col-md-8 col-sm-12" placeholder="Enter message" style="height: 200px; resize: none;" asp-for="SenderMessage"></textarea>
+                        <textarea class="form-control col-md-8 col-sm-12" placeholder="Enter message" style="height: 200px; resize: none;" asp-for="SenderMessage" required></textarea>
                     </div>
                 </div>
 

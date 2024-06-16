@@ -15,6 +15,7 @@ namespace AbarroLaw.Web.Controllers
         }
 
 
+        [HttpGet]
         public IActionResult ContactUs()
         {
             return View();
@@ -24,19 +25,27 @@ namespace AbarroLaw.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> SendMessage(AddEmailRequest addEmailRequest)
         {
-            var emailModel = new EmailMessage
+            if(addEmailRequest.SenderMessage == null || addEmailRequest.Email == null || addEmailRequest.Phone == null || addEmailRequest.MessageTitle == null || addEmailRequest.SenderName == null)
             {
-                SenderMessage = addEmailRequest.SenderMessage,
-                Email = addEmailRequest.Email,
-                Phone = addEmailRequest.Phone,
-                MessageTitle = addEmailRequest.MessageTitle,
-                SenderName = addEmailRequest.SenderName,
-                DateSent = addEmailRequest.DateSent
-            };
+                return View("AddPractice", addEmailRequest); // Return to the same view with validation errors
+            }
+            else
+            {
+                var emailModel = new EmailMessage
+                {
+                    SenderMessage = addEmailRequest.SenderMessage,
+                    Email = addEmailRequest.Email,
+                    Phone = addEmailRequest.Phone,
+                    MessageTitle = addEmailRequest.MessageTitle,
+                    SenderName = addEmailRequest.SenderName,
+                    DateSent = addEmailRequest.DateSent
+                };
 
-            await messageRepository.SendMessageAsync(emailModel);
+                await messageRepository.SendMessageAsync(emailModel);
 
-            return RedirectToAction("ContactUs");
+                return RedirectToAction("ContactUs");
+            }
+
         }
 
         //View of emails for Admin

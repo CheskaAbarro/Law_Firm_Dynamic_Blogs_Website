@@ -69,12 +69,14 @@
             @* Date sent *@
             <div class="container row mb-3 mt-3">
                 <div class="input-group border border-secondary p-2">
+                    @* ID *@
                     <div class="me-4">
                         <input type="hidden" class="form-control" asp-for="Id" readonly>
                         <label class="me-3 fw-bold">Message ID: </label>
                         <label>@Model.Id</label>
                     </div>
 
+                    @* Date Sent *@
                     <div class="ms-5">
                         <label class="me-3 fw-bold">Date sent: </label>
                         <label>@Model.DateSent</label>

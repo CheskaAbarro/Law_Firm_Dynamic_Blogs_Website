@@ -62,13 +62,14 @@
 
 @* Contents need to fill out ------------------------------------------------- *@
 <div class="container py-5">
-    <form method="post" enctype="multipart/form-data" onsubmit="return confirm('Are you sure to ADD this new practice area?');">
+    <form method="post" asp-validation-summary="All" onsubmit="return confirm('Are you sure to ADD this new practice area?');">
 
         @* Practice Name *@
         <div class="container row mb-3">
             <div class="form-group">
                 <label>Enter a new practice name:</label>
-                <input type="text" class="form-control" id="practiceName" asp-for="PracticeName"/>
+                <input type="text" class="form-control" id="practiceName" asp-for="PracticeName" />
+                <span asp-validation-for="PracticeName" class="text-danger"></span>
             </div>
         </div>
 
@@ -77,6 +78,7 @@
             <div class="form-group">
                 <label>Enter the practice description:</label>
                 <textarea class="form-control col-md-8 col-sm-12 desc-area" id="practiceDesc" asp-for="PracticeDescription" oninput="limitTextArea(this, 200)"></textarea>
+                <span asp-validation-for="PracticeDescription" class="text-danger"></span>
                 <p id="charLimitIndicator">Remaining characters: 200</p>
             </div>
         </div>
@@ -87,9 +89,10 @@
                 <label>Practice area image upload:</label>
                 <div class="input-group">
                     <input type="file" class="form-control" id="practiceImgUpload">
-                    <input type="hidden" id="practiceImageFileName" asp-for="PracticeImage"/>
+                    <input type="hidden" id="practiceImageFileName" asp-for="PracticeImage" />
                 </div>
 
+                <span asp-validation-for="PracticeImage" class="text-danger"></span>
                 <img src="" id="practiceImageDisplay" style="display: none; width: 20vh;" />
             </div>
         </div>
@@ -98,7 +101,7 @@
         <div class="container row mb-3">
             <div class="form-group">
                 <label>Image upload URL:</label>
-                <input type="text" class="form-control" id="practiceImgUploadURL" readonly asp-for="PracticeImageURL"/>
+                <input type="text" class="form-control" id="practiceImgUploadURL" readonly asp-for="PracticeImageURL" />
             </div>
         </div>
 

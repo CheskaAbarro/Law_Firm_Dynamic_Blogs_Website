@@ -4,6 +4,9 @@
 @{
     ViewBag.ShowFooter = false;
     ViewBag.ShowMessage = false;
+
+    // For error displays
+    ViewData["Title"] = "Edit Case";
 }
 
 <style>
@@ -78,6 +81,7 @@
             <div class="form-group">
                 <label>Enter new case name:</label>
                 <input type="text" class="form-control" id="caseName" asp-for="CaseName" />
+                <span asp-validation-for="CaseName" class="text-danger"></span>
             </div>
         </div>
 
@@ -85,7 +89,8 @@
         <div class="container row mb-3">
             <div class="form-group">
                 <label>Enter heading:</label>
-                <input type="text" class="form-control" id="heading" asp-for="Heading"/>
+                <input type="text" class="form-control" id="heading" asp-for="Heading" />
+                <span asp-validation-for="Heading" class="text-danger"></span>
             </div>
         </div>
 
@@ -93,6 +98,7 @@
         <div class="container row mb-3">
             <div class="form-group">
                 <textarea class="form-control col-md-8 col-sm-12 desc-area" id="shortDesc" asp-for="ShortDescription" oninput="limitTextArea(this, 200)"></textarea>
+                <span asp-validation-for="ShortDescription" class="text-danger"></span>
                 <p id="charLimitIndicator">Remaining characters: <span id="remainingChars">200</span></p>
             </div>
         </div>
@@ -105,6 +111,8 @@
                     <input type="file" class="form-control" id="featuredImgUpload">
                     <input type="hidden" id="featuredImageFileName" asp-for="FeaturedImg" />
                 </div>
+
+                <span asp-validation-for="FeaturedImg" class="text-danger"></span>
 
                 @if (Model.FeaturedImgURL != null)
                 {
@@ -130,6 +138,7 @@
             <div class="form-group">
                 <label class="form-label">Choose practice area:</label>
                 <select class="form-select" asp-items="@Model.Practices" asp-for="SelectedPractices"></select>
+                @Html.ValidationMessageFor(model => model.SelectedPractices, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -138,6 +147,7 @@
             <div class="form-group">
                 <label class="form-label">Case Content</label>
                 <textarea class="form-control" id="content" asp-for="Content"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
             </div>
         </div>
 

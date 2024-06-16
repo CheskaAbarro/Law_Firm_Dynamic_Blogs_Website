@@ -62,8 +62,8 @@
 
 
 <div class="container py-5">
-    @if (Model != null)
-    {
+    @* @if (Model != null)
+    { *@
         <form method="post">
             @* ID *@
             <div class="container row mb-3">
@@ -78,6 +78,7 @@
                 <div class="form-group">
                     <label class="form-label">Enter practice name:</label>
                     <input type="text" class="form-control" id="practiceName" asp-for="PracticeName" />
+                    <span asp-validation-for="PracticeName" class="text-danger"></span>
                 </div>
             </div>
 
@@ -85,7 +86,8 @@
             <div class="container row mb-0">
                 <div class="form-group">
                     <label class="form-label">Enter the practice description:</label>
-                    <textarea class="form-control col-md-8 col-sm-12 desc-area" id="practiceDesc" asp-for="PracticeDescription" oninput="limitTextArea(this, 200)"></textarea>
+                <textarea class="form-control col-md-8 col-sm-12 desc-area" id="practiceDesc" asp-for="PracticeDescription" oninput="limitTextArea(this, 200)"></textarea>
+                <span asp-validation-for="PracticeDescription" class="text-danger"></span>
                     <p id="charLimitIndicator">Remaining characters: <span id="remainingChars">200</span></p>
                 </div>
             </div>
@@ -99,6 +101,7 @@
                         <input type="hidden" id="practiceImageFileName" asp-for="PracticeImage" />
                     </div>
 
+                    <span asp-validation-for="PracticeImage" class="text-danger"></span>
                     @if (Model.PracticeImageURL != null)
                     {
                         <img src="@Url.Content("~/" + Model.PracticeImageURL)" id="practiceImageDisplay" style="display: block; width: 20vh;" />
@@ -147,11 +150,11 @@
             </div>
 
         </form>
-    }
+    @* }
     else
     {
         <h3>Practice ID does not exist!</h3>
-    }
+    } *@
 
 </div>
 

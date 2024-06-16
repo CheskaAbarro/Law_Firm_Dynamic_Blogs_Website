@@ -1,5 +1,6 @@
 using AbarroLaw.Web.Data;
 using AbarroLaw.Web.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,25 @@ builder.Services.AddScoped<ICaseRepository, CaseRepository>();
 builder.Services.AddScoped<IImageRepository, FolderImageRepository>();
 //For message inquiries
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+
+
+//For accounts database connection ----------------------
+builder.Services.AddDbContext<AuthDbContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("AuthConnectionString")));
+//For log in
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<AuthDbContext>();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    //Default settings
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequiredLength = 6;
+    options.Password.RequiredUniqueChars = 1;
+});
 
 var app = builder.Build();
 

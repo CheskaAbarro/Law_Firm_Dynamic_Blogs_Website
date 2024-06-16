@@ -1,10 +1,12 @@
 ﻿using AbarroLaw.Web.Models.Domain;
 using AbarroLaw.Web.Models.ViewModels;
 using AbarroLaw.Web.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AbarroLaw.Web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminPracticeController : Controller
     {
         private readonly IPracticeRepository practiceRepository;
@@ -26,20 +28,29 @@ namespace AbarroLaw.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> SubmitPractice(AddPracticeRequest addPracticeRequest)
         {
-
-            var practiceModel = new Practice
+            // Check if any required fields are null
+            if (string.IsNullOrEmpty(addPracticeRequest.PracticeName) || string.IsNullOrEmpty(addPracticeRequest.PracticeDescription) || addPracticeRequest.PracticeImage == null || string.IsNullOrEmpty(addPracticeRequest.PracticeImageURL))
             {
-                PracticeName = addPracticeRequest.PracticeName,
-                PracticeDescription = addPracticeRequest.PracticeDescription,
-                PracticeImage = addPracticeRequest.PracticeImage,
-                PracticeImageURL = addPracticeRequest.PracticeImageURL,
-                Visible = addPracticeRequest.Visible
-            };
+                ModelState.AddModelError("", "Please fill out all required fields.");
+                return View("AddPractice", addPracticeRequest); // Return to the same view with validation errors
+            }
+            else
+            {
+                var practiceModel = new Practice
+                {
+                    PracticeName = addPracticeRequest.PracticeName,
+                    PracticeDescription = addPracticeRequest.PracticeDescription,
+                    PracticeImage = addPracticeRequest.PracticeImage,
+                    PracticeImageURL = addPracticeRequest.PracticeImageURL,
+                    Visible = addPracticeRequest.Visible
+                };
 
 
-            await practiceRepository.AddPracticeAsync(practiceModel);
+                await practiceRepository.AddPracticeAsync(practiceModel);
 
-            return RedirectToAction("ViewAllPractice");
+                return RedirectToAction("ViewAllPractice");
+
+            }
         }
 
 
@@ -81,26 +92,36 @@ namespace AbarroLaw.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> EditPractice(EditPracticeRequest editPracticeRequest)
         {
-            var practice = new Practice
+            // Check if any required fields are null
+            if (string.IsNullOrEmpty(editPracticeRequest.PracticeName) || string.IsNullOrEmpty(editPracticeRequest.PracticeDescription) || editPracticeRequest.PracticeImage == null || string.IsNullOrEmpty(editPracticeRequest.PracticeImageURL))
             {
-                Id = editPracticeRequest.Id,
-                PracticeName = editPracticeRequest.PracticeName,
-                PracticeDescription = editPracticeRequest.PracticeDescription,
-                PracticeImage = editPracticeRequest.PracticeImage,
-                PracticeImageURL = editPracticeRequest.PracticeImageURL,
-                Visible = editPracticeRequest.Visible
-            };
-
-            var updatePractice = await practiceRepository.UpdatePracticeAsync(practice);
-
-            if (updatePractice != null)
-            {
-                return RedirectToAction("ViewAllPractice");
+                ModelState.AddModelError("", "Please fill out all required fields.");
+                return View("EditPractice", editPracticeRequest); // Return to the same view with validation errors
             }
             else
             {
-                return RedirectToAction("EditPractice");
-            }
+                var practice = new Practice
+                {
+                    Id = editPracticeRequest.Id,
+                    PracticeName = editPracticeRequest.PracticeName,
+                    PracticeDescription = editPracticeRequest.PracticeDescription,
+                    PracticeImage = editPracticeRequest.PracticeImage,
+                    PracticeImageURL = editPracticeRequest.PracticeImageURL,
+                    Visible = editPracticeRequest.Visible
+                };
+
+                var updatePractice = await practiceRepository.UpdatePracticeAsync(practice);
+
+                if (updatePractice != null)
+                {
+                    return RedirectToAction("ViewAllPractice");
+                }
+                else
+                {
+                    return RedirectToAction("EditPractice");
+                }
+
+            }            
 
         }
 

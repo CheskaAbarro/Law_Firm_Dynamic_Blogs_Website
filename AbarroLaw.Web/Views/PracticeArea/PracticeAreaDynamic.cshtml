@@ -61,51 +61,53 @@
     </h1>
 </div>
 
+
 <div class="container d-flex flex-column align-items-center" style="height: auto;">
     <div style="letter-spacing: 0.5em;">
         <h2> @Model.PracticeName - Related Cases</h2>
     </div>
 </div>
 
-<div class="container">
-    <div class="row row-cols-auto d-flex justify-content-center">
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            @if (Model != null)
-            {                
-                foreach (var casePost in Model.CasePosts)
-                {
-                    <div class="card mb-3 bg-light box-shadow mx-3">
-                        @* for image *@
-                        <div class="mb-2 bg-light box-shadow d-flex justify-content-center mt-2">
-                            <img src="@Url.Content("~/" + casePost.FeaturedImgURL)" alt="@casePost.Heading" class="card-img mb-2 d-block img-fluid case-img" />
-                        </div>
 
-                        @* Heading and date *@
-                        <h3 class="mb-1 text-uppercase">@casePost.Heading</h3>
-                        <p class="mb-0">Publish Date: @casePost.PublishedDate.ToShortDateString()</p>
-
-                        @* Practice area *@
-                        <p class="mb-3">
-                            @foreach (var practice in casePost.Practices)
-                            {
-                                <span class="badge bg-secondary me-1">@practice.PracticeName</span>
-                            }
-                        </p>
-
-                        @* Summary *@
-                        <p class="mb-4">@casePost.ShortDescription</p>
-                        <div class="card-body mt-auto">
-                            <a class="btn btn-dark float-end" asp-controller="DynamicCasePost" asp-action="CasePost" asp-route-urlHandle="@casePost.UrlHandle">
-                                Read more >>
-                            </a>
-                        </div>
-                    </div>
-                }
-            }
-            else
+@if (Model.CasePosts != null && Model.CasePosts.Any())
+{
+    <div class="container">
+        <div class="row row-cols-auto d-flex justify-content-center">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+            @foreach (var casePost in Model.CasePosts)
             {
-                <h4>No case posts found for the selected practice.</h4>
+                <div class="card mb-3 bg-light box-shadow mx-3">
+                    @* for image *@
+                    <div class="mb-2 bg-light box-shadow d-flex justify-content-center mt-2">
+                        <img src="@Url.Content("~/" + casePost.FeaturedImgURL)" alt="@casePost.Heading" class="card-img mb-2 d-block img-fluid case-img" />
+                    </div>
+
+                    @* Heading and date *@
+                    <h3 class="mb-1 text-uppercase">@casePost.Heading</h3>
+                    <p class="mb-0">Publish Date: @casePost.PublishedDate.ToShortDateString()</p>
+
+                    @* Practice area *@
+                    <p class="mb-3">
+                        @foreach (var practice in casePost.Practices)
+                        {
+                            <span class="badge bg-secondary me-1">@practice.PracticeName</span>
+                        }
+                    </p>
+
+                    @* Summary *@
+                    <p class="mb-4">@casePost.ShortDescription</p>
+                    <div class="card-body mt-auto">
+                        <a class="btn btn-dark float-end" asp-controller="DynamicCasePost" asp-action="CasePost" asp-route-urlHandle="@casePost.UrlHandle">
+                            Read more >>
+                        </a>
+                    </div>
+                </div>
             }
+            </div>
         </div>
     </div>
-</div>
+}
+else
+{
+    <p>No case posts found for the selected practice.</p>
+}

@@ -1,11 +1,14 @@
 ﻿using AbarroLaw.Web.Models.Domain;
 using AbarroLaw.Web.Models.ViewModels;
 using AbarroLaw.Web.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AbarroLaw.Web.Controllers
 {
+
+    [Authorize(Roles = "Admin")]
     public class AdminCaseController : Controller
     {
         private readonly ICaseRepository caseRepository;
@@ -34,41 +37,68 @@ namespace AbarroLaw.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> SubmitCase(AddCaseRequest addCaseRequest)
         {
-            //Mapping Practices
-            var selectedPractices = new List<Practice>();
-
-            foreach (var selectedPracticeId in addCaseRequest.SelectedPractices)
+            if (addCaseRequest.CaseName == null || addCaseRequest.Heading == null || addCaseRequest.ShortDescription == null || addCaseRequest.FeaturedImg == null || addCaseRequest.Content == null)
             {
-                var selectedPracticeGuid = Guid.Parse(selectedPracticeId);
-                var existingPractice = await practiceRepository.GetPracticeAsync(selectedPracticeGuid);
+                // Re-populate Practices in case of a validation error
+                var practices = await practiceRepository.GetAllPracticeAsync();
+                addCaseRequest.Practices = practices.Select(x => new SelectListItem { Text = x.PracticeName, Value = x.Id.ToString() });
 
-                if (existingPractice != null)
+                //For error handling and returning to AddCase without removing the existing input
+                ModelState.AddModelError("", "Please fill out this form.");
+                return View("AddCase", addCaseRequest); // Return to the form with validation error
+            }
+            else
+            {
+                //Mapping Practices
+                var selectedPractices = new List<Practice>();
+
+                foreach (var selectedPracticeId in addCaseRequest.SelectedPractices)
                 {
-                    selectedPractices.Add(existingPractice);
+                    var selectedPracticeGuid = Guid.Parse(selectedPracticeId);
+                    var existingPractice = await practiceRepository.GetPracticeAsync(selectedPracticeGuid);
+
+                    if (existingPractice != null)
+                    {
+                        selectedPractices.Add(existingPractice);
+                    }
+                }
+
+                var UrlHandleMaker = GenerateUrlHandle(addCaseRequest.Heading);
+
+                //Mapping input values to send to DB
+                var casePost = new CasePost
+                {
+                    CaseName = addCaseRequest.CaseName,
+                    Heading = addCaseRequest.Heading,
+                    Content = addCaseRequest.Content,
+                    ShortDescription = addCaseRequest.ShortDescription,
+                    FeaturedImg = addCaseRequest.FeaturedImg,
+                    FeaturedImgURL = addCaseRequest.FeaturedImgURL,
+                    UrlHandle = UrlHandleMaker,
+                    PublishedDate = addCaseRequest.PublishedDate,
+                    Visible = addCaseRequest.Visible,
+                    Practices = selectedPractices
+                };
+
+                if(selectedPractices.Count == 0 || UrlHandleMaker == null)
+                {
+                    // Re-populate Practices in case of a validation error
+                    var practices = await practiceRepository.GetAllPracticeAsync();
+                    addCaseRequest.Practices = practices.Select(x => new SelectListItem { Text = x.PracticeName, Value = x.Id.ToString() });
+
+                    //For error handling and returning to AddCase without removing the existing input
+                    ModelState.AddModelError("", "Please fill out this form.");
+                    return View("AddCase", addCaseRequest); // Return to the form with validation error
+                }
+                else
+                {
+                    //Call repository to save to DB
+                    await caseRepository.AddCaseAsync(casePost);
+
+                    return RedirectToAction("ViewAllCase");
                 }
             }
-
-            var UrlHandleMaker = GenerateUrlHandle(addCaseRequest.Heading);
-
-            //Mapping input values to send to DB
-            var casePost = new CasePost
-            {
-                CaseName = addCaseRequest.CaseName,
-                Heading = addCaseRequest.Heading,
-                Content = addCaseRequest.Content,
-                ShortDescription = addCaseRequest.ShortDescription,
-                FeaturedImg = addCaseRequest.FeaturedImg,
-                FeaturedImgURL = addCaseRequest.FeaturedImgURL,
-                UrlHandle = UrlHandleMaker,
-                PublishedDate = addCaseRequest.PublishedDate,
-                Visible = addCaseRequest.Visible,
-                Practices = selectedPractices
-            };
                         
-            //Call repository to save to DB
-            await caseRepository.AddCaseAsync(casePost);
-
-            return RedirectToAction("ViewAllCase");
         }
 
         private string GenerateUrlHandle(string input)
@@ -127,50 +157,76 @@ namespace AbarroLaw.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> EditCase(EditCaseRequest editCaseRequest)
         {
-            var urlHandleMaker = GenerateUrlHandle(editCaseRequest.Heading);
-
-            //Assign values to edit request
-            var casePostModel = new CasePost
+            if (editCaseRequest.CaseName == null || editCaseRequest.Heading == null || editCaseRequest.ShortDescription == null || editCaseRequest.FeaturedImg == null || editCaseRequest.Content == null)
             {
-                Id = editCaseRequest.Id,
-                CaseName = editCaseRequest.CaseName,
-                Heading = editCaseRequest.Heading,
-                Content = editCaseRequest.Content,
-                ShortDescription = editCaseRequest.ShortDescription,
-                FeaturedImg = editCaseRequest.FeaturedImg,
-                FeaturedImgURL = editCaseRequest.FeaturedImgURL,
-                UrlHandle = urlHandleMaker,
-                PublishedDate = editCaseRequest.PublishedDate,
-                Visible = editCaseRequest.Visible
-            };
+                // Re-populate Practices in case of a validation error
+                var practices = await practiceRepository.GetAllPracticeAsync();
+                editCaseRequest.Practices = practices.Select(x => new SelectListItem { Text = x.PracticeName, Value = x.Id.ToString() });
 
-            //Mapping practices
-            var selectedPractices = new List<Practice>();
-            foreach (var selectedPractice in editCaseRequest.SelectedPractices)
-            {
-                if (Guid.TryParse(selectedPractice, out var practice))
-                {
-                    var foundPractice = await practiceRepository.GetPracticeAsync(practice);
-                    if (foundPractice != null)
-                    {
-                        selectedPractices.Add(foundPractice);
-                    }
-                }
-            }
-
-            casePostModel.Practices = selectedPractices;
-
-            //Apply changes to DB
-            var updateCase = await caseRepository.UpdateCaseAsync(casePostModel);
-
-            if (updateCase != null)
-            {
-                return RedirectToAction("ViewAllCase");
+                //For error handling and returning to AddCase without removing the existing input
+                ModelState.AddModelError("", "Please fill out this form.");
+                return View("EditCase", editCaseRequest); // Return to the form with validation error
             }
             else
             {
-                return RedirectToAction("EditCase");
-            }
+                //Mapping practices
+                var selectedPractices = new List<Practice>();
+                foreach (var selectedPractice in editCaseRequest.SelectedPractices)
+                {
+                    if (Guid.TryParse(selectedPractice, out var practice))
+                    {
+                        var foundPractice = await practiceRepository.GetPracticeAsync(practice);
+                        if (foundPractice != null)
+                        {
+                            selectedPractices.Add(foundPractice);
+                        }
+                    }
+                }
+
+                var UrlHandleMaker = GenerateUrlHandle(editCaseRequest.Heading);
+
+                //Assign values to edit request
+                var casePostModel = new CasePost
+                {
+                    Id = editCaseRequest.Id,
+                    CaseName = editCaseRequest.CaseName,
+                    Heading = editCaseRequest.Heading,
+                    Content = editCaseRequest.Content,
+                    ShortDescription = editCaseRequest.ShortDescription,
+                    FeaturedImg = editCaseRequest.FeaturedImg,
+                    FeaturedImgURL = editCaseRequest.FeaturedImgURL,
+                    UrlHandle = UrlHandleMaker,
+                    PublishedDate = editCaseRequest.PublishedDate,
+                    Visible = editCaseRequest.Visible,
+                    Practices = selectedPractices
+                };
+
+                //casePostModel.Practices = selectedPractices;
+                if (selectedPractices.Count == 0 || UrlHandleMaker == null)
+                {
+                    // Re-populate Practices in case of a validation error
+                    var practices = await practiceRepository.GetAllPracticeAsync();
+                    editCaseRequest.Practices = practices.Select(x => new SelectListItem { Text = x.PracticeName, Value = x.Id.ToString() });
+
+                    //For error handling and returning to AddCase without removing the existing input
+                    ModelState.AddModelError("", "Please choose at least one practice area.");
+                    return View("EditCase", editCaseRequest); // Return to the form with validation error
+                }
+                else
+                {
+                    //Apply changes to DB
+                    var updateCase = await caseRepository.UpdateCaseAsync(casePostModel);
+
+                    if (updateCase != null)
+                    {
+                        return RedirectToAction("ViewAllCase");
+                    }
+                    else
+                    {
+                        return RedirectToAction("EditCase");
+                    }
+                }                   
+            }            
         }
 
 
