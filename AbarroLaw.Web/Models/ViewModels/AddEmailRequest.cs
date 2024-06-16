@@ -22,6 +22,7 @@ namespace AbarroLaw.Web.Models.ViewModels
         [Required(ErrorMessage = "Please enter your message.")]
         public string SenderMessage { get; set; }
 
+
         public DateTime DateSent { get; set; }
 
     }
