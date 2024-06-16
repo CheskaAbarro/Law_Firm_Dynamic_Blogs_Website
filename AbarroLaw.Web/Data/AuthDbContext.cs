@@ -46,14 +46,14 @@ namespace AbarroLaw.Web.Data
 
             var superAdminUser = new IdentityUser
             {
-                UserName = "abarrolawoffice",
-                Email = "abarrolawoffice@gmail.com",
-                NormalizedEmail = "abarrolawoffice@gmail.com".ToUpper(),
-                NormalizedUserName = "abarrolawoffice".ToUpper(),
+                UserName = "superadmin-username",
+                Email = "superadmin-email@gmail.com",
+                NormalizedEmail = "superadmin-email@gmail.com".ToUpper(),
+                NormalizedUserName = "superadmin-username".ToUpper(),
                 Id = superAdminId
             };
 
-            superAdminUser.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(superAdminUser, "Lexloquitor@12");
+            superAdminUser.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(superAdminUser, "password");
 
             builder.Entity<IdentityUser>().HasData(superAdminUser);
 
